@@ -7,8 +7,13 @@ import "./App.css";
 // import Cheat from "./NewCheatForm";
 
 import MyAppBar from "./AppBar";
-import Home from "./Home";
-import Shop from "./Shop";
+import Home from "./components/Home";
+import Shop from "./components/Shop";
+import AddNFT from "./components/AddNFT";
+import NFTPage from "./components/NFTPage";
+// import Shop from "./components/Shop";
+import Error from "./components/Error";
+import Collection from "./components/Collection";
 
 export default function App() {
     return (
@@ -17,7 +22,10 @@ export default function App() {
             <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route path="Marketplace" element={<Shop />} />
-                {/* <Route path="sendFuckinghelp" element={<Cheat />}></Route> */}
+                <Route path="Collection" element={<Collection />} />
+                <Route path="AddNFT" element={<AddNFT />} />
+                <Route path="NFT" element={<NFTPage />} />
+                <Route path="*" element={<Error />} />
             </Routes>
         </Router>
     );

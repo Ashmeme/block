@@ -1,18 +1,25 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import Error from "./components/Error";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useRouteMatch,
+    useParams,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 
-function MyAppBar() {
+function Navbar() {
     const [connected, toggleConnect] = useState(false);
     const location = useLocation();
     const [currAddress, updateAddress] = useState("0x");
+
     async function getAddress() {
         const ethers = require("ethers");
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -34,8 +41,8 @@ function MyAppBar() {
         const chainId = await window.ethereum.request({
             method: "eth_chainId",
         });
-
         if (chainId !== "0xaa36a7") {
+            //alert('Incorrect network! Switch your metamask network to Rinkeby');
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
                 params: [{ chainId: "0xaa36a7" }],
@@ -47,6 +54,7 @@ function MyAppBar() {
                 updateButton();
                 console.log("here");
                 getAddress();
+                window.location.replace(location.pathname);
             });
     }
 
@@ -70,7 +78,6 @@ function MyAppBar() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
-                        href="/"
                         variant="h6"
                         noWrap
                         component="a"
@@ -85,7 +92,7 @@ function MyAppBar() {
                             textDecoration: "none",
                         }}
                     >
-                        NFT MarketPlace
+                        <Link to="/">NFT MarketPlace</Link>
                     </Typography>
 
                     <Box
@@ -96,7 +103,6 @@ function MyAppBar() {
                         }}
                     >
                         <Button
-                            href="marketplace"
                             sx={{
                                 my: 2,
                                 color: "white",
@@ -104,25 +110,9 @@ function MyAppBar() {
                                 m: "10px",
                             }}
                         >
-                            Marketplace
+                            <Link to="/Marketplace">Marketplace</Link>
                         </Button>
-                        {connected ? (
-                            <Button
-                                href="Collection"
-                                sx={{
-                                    my: 2,
-                                    color: "white",
-                                    display: "block",
-                                    m: "10px",
-                                }}
-                            >
-                                Collection
-                            </Button>
-                        ) : (
-                            ""
-                        )}
                         <Button
-                            href="/"
                             sx={{
                                 my: 2,
                                 color: "white",
@@ -130,7 +120,28 @@ function MyAppBar() {
                                 m: "10px",
                             }}
                         >
-                            About Us
+                            <Link to="/profile">Collection</Link>
+                        </Button>
+                        <Button
+                            sx={{
+                                my: 2,
+                                color: "white",
+                                display: "block",
+                                m: "10px",
+                            }}
+                        >
+                            <Link to="/SellNft">Sell your NFT</Link>
+                        </Button>
+
+                        <Button
+                            sx={{
+                                my: 2,
+                                color: "white",
+                                display: "block",
+                                m: "10px",
+                            }}
+                        >
+                            <Link to="/">About us</Link>
                         </Button>
                     </Box>
 
@@ -150,9 +161,7 @@ function MyAppBar() {
                                 m: "10px",
                             }}
                             onClick={connectWebsite}
-                        >
-                            {connected ? "Connected" : "Connect Wallet"}
-                        </Button>
+                        ></Button>
                     </Box>
                     <Box
                         sx={{
@@ -171,4 +180,5 @@ function MyAppBar() {
         </AppBar>
     );
 }
-export default MyAppBar;
+
+export default Navbar;

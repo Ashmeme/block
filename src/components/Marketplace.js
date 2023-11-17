@@ -1,81 +1,15 @@
-import * as React from "react";
+import NFTTile from "./nftItem";
+import MarketplaceJSON from "../Marketplace.json";
+import axios from "axios";
+import { useState } from "react";
+import { GetIpfsUrlFromPinata } from "../utils";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { experimentalStyled as styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { BrowserRouter as Router, Link } from "react-router-dom";
-import MarketplaceJSON from "../Marketplace";
-import axios from "axios";
-import { useState } from "react";
+import Grid from "@mui/material/Unstable_Grid2";
 
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
-
-function NFTTile(data, key) {
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: "#E4EEFF",
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-    }));
-
-    const newTo = {
-        pathname: "/nftPage/" + data.data.tokenId,
-    };
-
-    const IPFSUrl = GetIpfsUrlFromPinata(data.data.image);
-
-    return (
-        <Link to={newTo}>
-            <Item>
-                <Card sx={{ maxWidth: 245 }}>
-                    <CardMedia
-                        sx={{ height: 250 }}
-                        image={IPFSUrl}
-                        title="green iguana"
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            {data.data.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {data.data.description}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small">Buy</Button>
-                    </CardActions>
-                </Card>
-            </Item>
-        </Link>
-    );
-}
-
-const GetIpfsUrlFromPinata = (pinataUrl) => {
-    var IPFSUrl = pinataUrl.split("/");
-    const lastIndex = IPFSUrl.length;
-    IPFSUrl = "https://ipfs.io/ipfs/" + IPFSUrl[lastIndex - 1];
-    return IPFSUrl;
-};
-function Shop() {
-    const sampleData = [
-        {
-            name: "NFT#1",
-            description: "Alchemy's First NFT",
-            website: "http://axieinfinity.io",
-            image: "https://gateway.pinata.cloud/ipfs/QmXgFWYe6ydijYo4zgN118vziD5pzVz9m6hpaFWAgTQv2t",
-            price: "0.03ETH",
-            currentlySelling: "True",
-            address: "0xe81Bf5A757CB4f7F82a2F23b1e59bE45c33c5b13",
-        },
-    ];
-
+export default function Marketplace() {
+    const sampleData = [];
     const [data, updateData] = useState(sampleData);
     const [dataFetched, updateFetched] = useState(false);
 
@@ -92,18 +26,15 @@ function Shop() {
         );
         //create an NFT Token
         let transaction = await contract.getAllNFTs();
-        console.log(transaction);
 
         //Fetch all the details of every NFT from the contract and display
         const items = await Promise.all(
             transaction.map(async (i) => {
                 var tokenURI = await contract.tokenURI(i.tokenId);
-                console.log(tokenURI);
+                console.log("getting this tokenUri", tokenURI);
                 tokenURI = GetIpfsUrlFromPinata(tokenURI);
-                console.log(tokenURI);
                 let meta = await axios.get(tokenURI);
                 meta = meta.data;
-                console.log(meta);
 
                 let price = ethers.utils.formatUnits(
                     i.price.toString(),
@@ -123,7 +54,6 @@ function Shop() {
         );
 
         updateFetched(true);
-        console.log(items);
         updateData(items);
     }
 
@@ -162,5 +92,3 @@ function Shop() {
         </div>
     );
 }
-
-export default Shop;

@@ -3,6 +3,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function Home() {
     return (
@@ -15,12 +16,8 @@ function Home() {
                         opportunity to become the owner of an NFT work of art.
                     </h1>
                 </Box>
-                <Button
-                    href="marketplace"
-                    sx={{ mt: "100px", ml: "40%" }}
-                    variant="contained"
-                >
-                    Browse our shop
+                <Button sx={{ mt: "100px", ml: "40%" }} variant="contained">
+                    <Link to="/marketplace">Browse our shop</Link>
                 </Button>
             </Container>
         </div>

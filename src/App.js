@@ -1,35 +1,25 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
 import "./App.css";
-// import Pages from "./Pages";
-// import Cheat from "./NewCheatForm";
-
-import MyAppBar from "./AppBar";
+import Navbar from "./components/AppBar.js";
+import Marketplace from "./components/Marketplace";
+import Profile from "./components/Collection.js";
+import SellNFT from "./components/SellNFT";
+import NFTPage from "./components/NFTpage";
 import Home from "./components/Home";
-import Shop from "./components/Shop";
-import AddNFT from "./components/AddNFT";
-import NFTPage from "./components/NFTPage";
-// import Shop from "./components/Shop";
-import Error from "./components/Error";
-import Collection from "./components/Collection";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-export default function App() {
+function App() {
     return (
-        <Router>
-            <MyAppBar />
+        <div className="container">
             <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="Marketplace" element={<Shop />} />
-                <Route path="Collection" element={<Collection />} />
-                <Route path="AddNFT" element={<AddNFT />} />
-                <Route path="NFT" element={<NFTPage />} />
-                <Route path="*" element={<Error />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/nftPage" element={<NFTPage />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/sellNFT" element={<SellNFT />} />
             </Routes>
-        </Router>
+        </div>
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+export default App;
